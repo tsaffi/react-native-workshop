@@ -24,12 +24,12 @@ export default class App extends Component {
   componentDidMount() {
     let dummyTodos = [
       {title: 'Wake up from be', done: false}, 
-      {title: 'Pray', done: false}, 
+      {title: 'Pray', done: true}, 
       {title: 'Brush your teeth', done: false}, 
-      {title: 'Greet bae', done: false}, 
+      {title: 'Greet bae', done: true}, 
       {title: 'Break fast', done: false}, 
       {title: 'Morning work out', done: false}, 
-      {title: 'Momo deposite', done: false}, 
+      {title: 'Momo deposite', done: true}, 
       {title: 'Drop a payload', done: false}, 
       /*
       */
@@ -67,6 +67,10 @@ export default class App extends Component {
   }
 
   deleteTodo(todo) {
+    // prevent todo in pending state from being deleted
+    if(!todo.done){
+      return;
+    }
     // We assume that each todo has a unique name
     let existingTodos = this.state.todos; 
     let newTodoList = existingTodos.filter((existingTodoItem, key) => {
@@ -78,72 +82,89 @@ export default class App extends Component {
     this.setState({todos: newTodoList});
   }
 
+    toggleTodoState(todoToUpdate){
+        console.log(todoToUpdate);
+        this.setState({
+            todos: this.state.todos.map((todo, index)=>(todo.title === todoToUpdate.title ? Object.assign({}, todo, {done: !todo.done}) : todo))
+        })
+    }
+
   render() {
+    console.log(this.state.todos);
     if (this.state.todos.length == 0) {
       return null; 
     }
 
     return (
-      <View style={style.rootRoot}>
-        <ScrollView 
-          contentContainerStyle={{ flexGrow: 1 }}
-          style={style.rootContainer}>
-          <ImageBackground source={require('./res/lily.jpg')} style={{width: '100%', height: '100%'}}>
-          <View style={style.imageWatermark}>
-          {/*<Text>Header component</Text>*/}
-          {/*<Header />*/}
-          <View style={style.headerContainer}>
-            <Text style={style.headerText}>My Todo List</Text>
-          </View>
-
-          {/*<Text>Todo list component</Text>*/}
-          {/*<TodoList />*/}
-            {/*<Text>Todo component</Text>*/}
-          <View style={style.todoListContainer}>
-            {this.state.todos.map((todo, key) => {
-              return (
-                <View key={key} style={style.todoItemContainer}>
-                  <View style={style.todoItemContentContainer}>
-                    <Text>{todo.title}</Text>
-                    <Text>{todo.done ? 'Done' : 'Pending'}</Text>
-                  </View>
-                  <View style={style.todoItemButtonContainer}>
-                    <TouchableOpacity 
-                      onPress={() => this.deleteTodo(todo)}
-                      style={style.todoItemDeleteButton}>
-                      <Text style={style.todoItemDeleteButtonText}>X</Text>
-                    </TouchableOpacity>
-                  </View>
-              </View>
-              )
-            })}            
-          </View>
-          </View>
-          </ImageBackground>
-        </ScrollView>
+        <View style={style.rootRoot}>
+            <ScrollView 
+                contentContainerStyle={{ flexGrow: 1 }}
+                style={style.rootContainer}>
+                <ImageBackground source={require('./res/lily.jpg')} style={{width: '100%', height: '100%'}}>
+                    <View style={style.imageWatermark}>
+                        {/*<Text>Header component</Text>*/}
+                        {/*<Header />*/}
+                        <View style={style.headerContainer}>
+                            <Text style={style.headerText}>My Todo List</Text>
+                        </View>
+                            {/*<Text>Todo list component</Text>*/}
+                            {/*<TodoList />*/}
+                            {/*<Text>Todo component</Text>*/}
+                        <View style={style.todoListContainer}>
+                            {this.state.todos.map((todo, key) => {
+                                return (
+                                    <View key={key} style={style.todoItemContainer}>
+                                        <View style={style.todoItemContentContainer}>
+                                            <Text>{todo.title}</Text>
+                                            {todo.done ?
+                                                <Text style={style.todoItemDoneState}>Done</Text>
+                                            :
+                                                <Text style={style.todoItemPendingState}>Pending</Text>
+                                            }
+                                        </View>
+                                        <View style={style.todoItemButtonContainer}>
+                                            <TouchableOpacity 
+                                                onPress={() => this.toggleTodoState(todo)}
+                                                style={style.todoToggleItemStateButton}
+                                            >
+                                                <Text style={style.todoToggleItemStateButtonText}>State</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity 
+                                                onPress={() => this.deleteTodo(todo)}
+                                                style={style.todoItemDeleteButton}
+                                            >
+                                                <Text style={style.todoItemDeleteButtonText}>X</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                )
+                            })}            
+                        </View>
+                    </View>
+                </ImageBackground>
+            </ScrollView>
         
-        <View>
-          {/*<Text>New Todo component</Text>*/}
-          {/*<NewTodo />*/}
-          <View style={style.newTodoContainer}>
-            <View style={style.newTodoContainerInputContainer}>
-              <TextInput 
-                value={this.state.newTodoText}
-                onChangeText={(text) => this.setState({newTodoText: text})}
-                placeholder="Type a new todo item"
-                style={style.newTodoInput} />
+            <View>
+                {/*<Text>New Todo component</Text>*/}
+                {/*<NewTodo />*/}
+                <View style={style.newTodoContainer}>
+                    <View style={style.newTodoContainerInputContainer}>
+                      <TextInput 
+                        value={this.state.newTodoText}
+                        onChangeText={(text) => this.setState({newTodoText: text})}
+                        placeholder="Type a new todo item"
+                        style={style.newTodoInput} />
+                    </View>
+                    <View style={style.newTodoButtonContainer}>
+                      <TouchableOpacity 
+                        onPress={ () => this.addNewTodo() }
+                        style={style.newTodoButtonContainerButton}>
+                        <Text style={style.newTodoButtonContainerButtonText}>Add</Text>
+                      </TouchableOpacity>
+                    </View>
+                </View>
             </View>
-            <View style={style.newTodoButtonContainer}>
-              <TouchableOpacity 
-                onPress={ () => this.addNewTodo() }
-                style={style.newTodoButtonContainerButton}>
-                <Text style={style.newTodoButtonContainerButtonText}>Add</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
         </View>
-
-      </View>
     );
   }
 }

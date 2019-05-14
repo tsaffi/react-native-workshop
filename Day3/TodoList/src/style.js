@@ -44,14 +44,16 @@ const todoItemContentContainer = {
 }
 
 const todoItemButtonContainer = {
-	flex: 1
+	flex: 1,
+	flexDirection: 'row'
 }
 
 const todoItemDeleteButton = {
 	backgroundColor: '#b71540', 
-	padding: 20,
+	padding: 5,
 	alignItems: 'center', 
-	justifyContent: 'center'
+	justifyContent: 'center',
+	flex: 1
 }
 
 const todoItemDeleteButtonText = {
@@ -59,6 +61,19 @@ const todoItemDeleteButtonText = {
 	fontSize: 16
 }
 
+const todoToggleItemStateButton = {
+	backgroundColor: 'green', 
+	padding: 5,
+	alignItems: 'center', 
+	justifyContent: 'center',
+	flex: 1,
+	marginRight: 4
+}
+
+const todoToggleItemStateButtonText = {
+	color: WHITE,
+	fontSize: 16
+}
 
 
 const newTodoContainer = {
@@ -94,6 +109,16 @@ const newTodoInput = {
 	borderRightColor: 'grey'
 }
 
+const todoItemDoneState = {
+	color: 'green',
+    textDecorationLine: "line-through",
+    textDecorationStyle: "solid",
+    textDecorationColor: "#000"
+}
+
+const todoItemPendingState = {
+	color: 'blue'
+}
 
 export default {
 	rootRoot, 
@@ -107,7 +132,9 @@ export default {
 	todoItemContentContainer, 
 	todoItemButtonContainer, 
 	todoItemDeleteButton, 
-	todoItemDeleteButtonText, 
+	todoItemDeleteButtonText,
+	todoToggleItemStateButton,
+	todoToggleItemStateButtonText,
 
 	newTodoContainer, 
 	newTodoContainerInputContainer, 
@@ -116,5 +143,8 @@ export default {
 	newTodoButtonContainerButtonText, 
 	newTodoInput, 
 
-	imageWatermark
+	imageWatermark,
+
+	todoItemDoneState,
+	todoItemPendingState
 }
